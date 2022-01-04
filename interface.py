@@ -12,27 +12,45 @@ class Application (Frame):
         self.page1()
     def page1(self):
         #initi frame for this page
-        self.p1_frame = Frame(self.master)
-        self.p1_frame.grid(column=0, row=0, sticky=(W, E))
+        self.mainframe = Frame(self.master)
+        self.mainframe.grid(column=0, row=0, sticky=(W, E))
 
-        self.p1_title = Label(self.p1_frame, text='Automat Biletowy MPK', font=('bold', 14), pady=20).grid(row=0, column=0, sticky=(N,E,W), columnspan=3)
+        self.title = Label(self.mainframe, text='Automat Biletowy MPK', font=('bold', 14), pady=20).grid(row=0, column=0, sticky=(N,E,W), columnspan=3)
 
         #labels
-        self.p1_ulgowy = Label(self.p1_frame, text='Ulgowy', padx=10).grid(row=1, column=0, sticky=W)
-        self.p1_normalny = Label(self.p1_frame, text='Normalny', padx=10).grid(row=1, column=2, sticky=W)
-        self.p1_white_space = Label(self.p1_frame, text=' ', padx=20).grid(row=2,column=1, sticky=W)
-        
+        self.ulgowy = Label(self.mainframe, text='Ulgowy', padx=10).grid(row=1, column=0, sticky=W)
+        self.normalny = Label(self.mainframe, text='Normalny', padx=10).grid(row=1, column=2, sticky=W)
+        self.white_space = Label(self.mainframe, text=' ', padx=20).grid(row=2,column=1, sticky=W)
+
         #buttons
-        self.p1_u_20 = Button(self.p1_frame, text='20 Minut 2,00 zł', padx=10, pady=10).grid(row=2, column=0, sticky=W)
-        self.p1_n_20 = Button(self.p1_frame, text='20 Minut 4,00 zł', padx=10, pady=10).grid(row=2, column=2, sticky=W)
+        self.u_20 = Button(self.mainframe, text='20 Minut 2,00 zł', padx=10, pady=10).grid(row=2, column=0, sticky=W)
+        self.n_20 = Button(self.mainframe, text='20 Minut 4,00 zł', padx=10, pady=10).grid(row=2, column=2, sticky=W)
 
-        self.p1_u_40 = Button(self.p1_frame, text='40 Minut 2,50 zł', padx=10, pady=10).grid(row=3, column=0, sticky=W)
-        self.p1_n_40 = Button(self.p1_frame, text='40 Minut 5,00 zł', padx=10, pady=10).grid(row=3, column=2, sticky=W)
+        self.u_40 = Button(self.mainframe, text='40 Minut 2,50 zł', padx=10, pady=10).grid(row=3, column=0, sticky=W)
+        self.n_40 = Button(self.mainframe, text='40 Minut 5,00 zł', padx=10, pady=10).grid(row=3, column=2, sticky=W)
 
-        self.p1_u_60 = Button(self.p1_frame, text='60 Minut 3,00 zł', padx=10, pady=10).grid(row=4, column=0, sticky=W)
-        self.p1_n_60 = Button(self.p1_frame, text='60 Minut 6,00 zł', padx=10, pady=10).grid(row=4, column=2, sticky=W)
+        self.u_60 = Button(self.mainframe, text='60 Minut 3,00 zł', padx=10, pady=10).grid(row=4, column=0, sticky=W)
+        self.n_60 = Button(self.mainframe, text='60 Minut 6,00 zł', padx=10, pady=10).grid(row=4, column=2, sticky=W)
 
-        self.p1_platnosc = Button(self.p1_frame, text='Przejdź do płatności', pady=10, padx=20).grid(row=5, column=0, sticky=S, columnspan=3)
+        self.platnosc = Button(self.mainframe, text='Przejdź do płatności', pady=10, padx=20, command=self.page2).grid(row=5, column=0, sticky=S, columnspan=3)
+
+    def page2(self):
+        
+        self.mainframe.destroy()
+        self.mainframe = Frame(self.master)
+        self.mainframe.grid(column=0, row=0, sticky=(W,E))
+        
+        self.title = Label(self.mainframe, text='Automat Biletowy MPK', font=('bold', 14), pady=20).grid(row=0, column=0, sticky=(N,E,W), columnspan=3)
+
+        self.tekst1 = Label(self.mainframe, text='Podsumowanie', pady=20).grid(row=1, column=0, sticky=W)
+
+        #ilosc biletow
+
+        
+        self.p1_platnosc = Button(self.mainframe, text='Powrot', pady=10, padx=20, command=lambda:[self.mainframe.destroy(), self.page1()]).grid(row=5, column=0, sticky=S, columnspan=3)
+
+    
+        
 
         
 
