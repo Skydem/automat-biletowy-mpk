@@ -45,7 +45,8 @@ class Application (Frame):
         self.tekst1 = Label(self.mainframe, text='Podsumowanie', pady=20, font=(12)).grid(row=1, column=0, sticky=W)
 
         #ilosc biletow
-        self.bilet1 = Label(self.mainframe, text="20 minut ulgowy").grid(row=2,column=0, sticky=W)
+        self.bilet1_ilosc = 1
+        self.bilet1 = Label(self.mainframe, text=(str(self.bilet1_ilosc)+"x 20 minut ulgowy")).grid(row=2,column=0, sticky=W)
         self.bilet1_dodaj = Button(self.mainframe, text="+",padx=5).grid(row=2,column=1,sticky=W)
         self.bilet1_usun = Button(self.mainframe, text="-",padx=5).grid(row=2,column=2,sticky=W)
         
@@ -73,7 +74,7 @@ class Application (Frame):
                 i=0
 
 
-        self.p1_platnosc = Button(self.mainframe, text='Powrot',pady=10, padx=20, command=lambda:[self.mainframe.destroy(), self.page1()]).grid(row=10, column=0, sticky=S, columnspan=3)
+        self.p1_platnosc = Button(self.mainframe, text='Powrot',pady=10, padx=20, command=lambda:[self.mainframe.destroy(), self.page1()]).grid(row=10, column=0, sticky=S, columnspan=6)
 
     
         
