@@ -57,11 +57,14 @@ class Application (Frame):
         self.wrzucono_val = 0
         self.wrzucono_text = Label(self.mainframe,text="Wrzucono: ").grid(row=4,column=0,sticky=W)
         self.wrzucono = Label(self.mainframe,text=(str(self.wrzucono_val)+" zł")).grid(row=4,column=2,sticky=W)
+        
         #wrzucanie monet
         self.white_space = Label(self.mainframe, text=' ', pady=10).grid(row=5,column=0, sticky=W)
         self.tekst2 = Label(self.mainframe, text='Wrzuć monety', font=(12)).grid(row=6, column=0, sticky=W)
         
         self.nazwy_monet = ["0.01 zł", "0.02 zł", "0.05 zł", "0.10 zł", "0.20 zł", "0.50 zł", "1.00 zł", "2.00 zł", "5.00 zł", "10.0 zł", "20.0 zł", "50.0 zł"]
+        self.wartosci_monet = [1, 2, 5, 10, 20, 50, 100, 200, 500, 2000, 5000]
+
         row_moneta = 7
         i=0
         for moneta in self.nazwy_monet:
