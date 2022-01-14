@@ -7,7 +7,7 @@ class Application (Frame):
     def __init__(self, master):
         super().__init__(master)
         self.master = master
-        self.logic = logic()
+        self.logic = logic.logic()
         master.title('Automat Biletowy MPK')
         master.geometry("150x400")
         master.minsize(height=200, width=400)
@@ -25,14 +25,20 @@ class Application (Frame):
         self.white_space = Label(self.mainframe, text=' ', padx=20).grid(row=2,column=1, sticky=W)
 
         #buttons
-        self.u_20 = Button(self.mainframe, text='20 Minut 2,00 zł', padx=10, pady=10).grid(row=2, column=0, sticky=W)
-        self.n_20 = Button(self.mainframe, text='20 Minut 4,00 zł', padx=10, pady=10).grid(row=2, column=2, sticky=W)
+        self.u_20 = Button(self.mainframe, text='20 Minut 2,00 zł', padx=10, pady=10, command=lambda:[self.logic.add_ticket(1), self.page2()])
+        self.u_20.grid(row=2, column=0, sticky=W)
+        self.n_20 = Button(self.mainframe, text='20 Minut 4,00 zł', padx=10, pady=10, command=lambda:[self.logic.add_ticket(4), self.page2()])
+        self.n_20.grid(row=2, column=2, sticky=W)
 
-        self.u_40 = Button(self.mainframe, text='40 Minut 2,50 zł', padx=10, pady=10).grid(row=3, column=0, sticky=W)
-        self.n_40 = Button(self.mainframe, text='40 Minut 5,00 zł', padx=10, pady=10).grid(row=3, column=2, sticky=W)
+        self.u_40 = Button(self.mainframe, text='40 Minut 2,50 zł', padx=10, pady=10, command=lambda:[self.logic.add_ticket(2), self.page2()])
+        self.u_40.grid(row=3, column=0, sticky=W)
+        self.n_40 = Button(self.mainframe, text='40 Minut 5,00 zł', padx=10, pady=10, command=lambda:[self.logic.add_ticket(5), self.page2()])
+        self.n_40.grid(row=3, column=2, sticky=W)
 
-        self.u_60 = Button(self.mainframe, text='60 Minut 3,00 zł', padx=10, pady=10).grid(row=4, column=0, sticky=W)
-        self.n_60 = Button(self.mainframe, text='60 Minut 6,00 zł', padx=10, pady=10).grid(row=4, column=2, sticky=W)
+        self.u_60 = Button(self.mainframe, text='60 Minut 3,00 zł', padx=10, pady=10, command=lambda:[self.logic.add_ticket(3), self.page2()])
+        self.u_60.grid(row=4, column=0, sticky=W)
+        self.n_60 = Button(self.mainframe, text='60 Minut 6,00 zł', padx=10, pady=10, command=lambda:[self.logic.add_ticket(6), self.page2()])
+        self.n_60.grid(row=4, column=2, sticky=W)
 
         self.platnosc = Button(self.mainframe, text='Przejdź do płatności', pady=10, padx=20, command=self.page2).grid(row=5, column=0, sticky=S, columnspan=3)
 
@@ -65,13 +71,15 @@ class Application (Frame):
         self.tekst2 = Label(self.mainframe, text='Wrzuć monety', font=(12)).grid(row=6, column=0, sticky=W)
         
         self.nazwy_monet = ["0.01 zł", "0.02 zł", "0.05 zł", "0.10 zł", "0.20 zł", "0.50 zł", "1.00 zł", "2.00 zł", "5.00 zł", "10.0 zł", "20.0 zł", "50.0 zł"]
-        self.wartosci_monet = [1, 2, 5, 10, 20, 50, 100, 200, 500, 2000, 5000]
+        self.wartosci_monet = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000]
 
         row_moneta = 7
         i=0
-        for moneta in self.nazwy_monet:
-            print("row = "+str(row_moneta)+", column= "+str(i)) #debug
-            Button(self.mainframe, text=moneta,padx=5).grid(row=row_moneta,column=i,sticky=(E, W),columnspan=1)
+
+        for moneta, wartosc in zip(self.nazwy_monet, self.wartosci_monet):
+            #print("row = "+str(row_moneta)+", column= "+str(i)) #debug
+            #print("moneta: {}, wartosc: {}".format(moneta, wartosc))
+            Button(self.mainframe, text=moneta,padx=5, command=lambda wartosc=wartosc: self.logic.insert_coin(wartosc)).grid(row=row_moneta,column=i,sticky=(E, W),columnspan=1)
             
             i+=1
             if(i==6):
