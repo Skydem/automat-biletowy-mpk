@@ -33,7 +33,7 @@ class storage:
             print('Błąd przy zapisie stanu monet do pliku!!')
             print(sys.exc_info()[:2])
 
-    def add(self, value, count):
+    def add(self, value, count, save=False):
         try:
             self.money[value] += count
         except KeyError:
@@ -42,11 +42,11 @@ class storage:
             print("Nieprawidłowa wartość zmiennej!")
         except:
             print(sys.exc_info()[:2])
-
-        self.save_to_file()
+        if save == True:
+            self.save_to_file()
         
         
-    def sub(self, value, count):
+    def sub(self, value, count, save=False):
         try:
             self.money[value] -= count
         except KeyError:
@@ -55,15 +55,19 @@ class storage:
             print("Nieprawidłowa wartość zmiennej!")
         except:
             print(sys.exc_info()[:2])
+        if save == True:
+            self.save_to_file()
 
-        self.save_to_file()
+    def return_sum(self):
+        return sum([k*v for (k,v) in self.money.items()])
 
     def rest(self, inserted, price):
         self.to_give = inserted - price
         self.given = 0
         self.given_money = {k:0 for k in self.money.keys()}
-        self.sum_money = sum([k*v for (k,v) in self.money.items()])
-        if self.sum_money > self.to_give:
+        self.sum_money = self.return_sum()
+        fuse = 0
+        if self.sum_money >= self.to_give:
             while self.to_give > 0:
                 for key, value in reversed(self.money.items()):
                     if int(value) > 0 and self.to_give - int(key) >= 0:
@@ -71,15 +75,26 @@ class storage:
                         self.to_give -= int(key)
                         self.given_money[int(key)] += 1
                         self.sub(key, 1)
+                        fuse = 0
                         break
-        elif self.sum_money == self.to_give:
-            print("a")
+                    else:
+                        fuse+=1
+                        print("fuse: ", fuse)
+                        if fuse == 100:
+                            print("Nie mozna wydac reszty")
+                            break
+                if fuse == 100:
+                    print("Nie mozna wydac reszty")
+                    break
         else:
             print("Tylko odliczona kwota!")
                 
                     
         print(self.given_money)
         print(self.given)
+
+    def return_keys(self):
+        return {k:0 for k in self.money.keys()}
 
 
 
@@ -90,5 +105,6 @@ a = storage()
 # a.add(5, 5)
 # a.add(10, 10)
 # a.add(20, 20)
-a.rest(410, 210)
+a.rest(300, 210)
+#a.rest(310, 210)
 #print(a.money)
