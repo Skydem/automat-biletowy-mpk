@@ -1,11 +1,13 @@
 from tkinter import *
 from tkinter import font
 from typing import Collection
+import logic
 
 class Application (Frame):
     def __init__(self, master):
         super().__init__(master)
         self.master = master
+        self.logic = logic()
         master.title('Automat Biletowy MPK')
         master.geometry("150x400")
         master.minsize(height=200, width=400)
