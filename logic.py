@@ -1,5 +1,7 @@
+import this
 import money_storage
 import sys
+import interface
 
 class logic:
     def __init__(self):
@@ -14,28 +16,28 @@ class logic:
     def add_ticket(self, id, quantity=1):
         self.chosen_tickets[id] += quantity
         self.price += self.tickets[id]
-        print("Dodano bilet!")
+        #print("Dodano bilet!")
         print(self.chosen_tickets)
     def remove_ticket(self, id, quantity=1):
         self.chosen_tickets[id] -= quantity
         self.price -= self.tickets[id]
-    def refresh_data(self):
-        print('wip')
+        print(self.chosen_tickets)
     def check_rest(self):
         print("----check rest----")
         b = self.ms.rest(self.inserted, self.price)
+        #print("b = ", b)
         if b:
             for key, value in b.items():
                 self.inserted_coins[key] = 0
                 if value > 0:
                     print("Wydaje: {}gr x{}".format(key, value))
-            self.ms.save_to_file(self.ms.temp_money)
+                    self.ms.sub(key, value, True)
             self.inserted = 0
             self.chosen_tickets = {k:0 for k in self.tickets.keys()}
             self.rest = 0
             self.price = 0
+            return True
             
-
         else:
             print("Nie można wydać reszty, tylko odliczona kwota")
             for key, value in self.inserted_coins.items():
@@ -45,6 +47,7 @@ class logic:
                 self.inserted_coins[key] = 0
             self.inserted = 0
             self.rest = 0
+            return False
     def insert_coin(self, coin, quantity=1):
         try:
             self.inserted_coins[coin] += quantity
@@ -61,6 +64,9 @@ class logic:
             print("otrzymałem: ", coin)
             print(sys.exc_info()[:2])
             print("Nieznana moneta!")
+
+    def refresh_data(self):
+        print('wip')
 
 
 # a = logic()

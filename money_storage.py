@@ -76,7 +76,6 @@ class storage:
                         self.given += int(key)
                         self.to_give -= int(key)
                         self.given_money[int(key)] += 1
-                        #self.sub(key, 1)
                         self.temp_money[key] -= 1
                         fuse = 0
                         break
@@ -87,10 +86,8 @@ class storage:
                 if fuse == 100:
                     break
             if fuse == 100:
-                print("Nie mozna wydac reszty?")
                 return False
         else:
-            print("Tylko odliczona kwota!")
             return False
 
         return self.given_money
