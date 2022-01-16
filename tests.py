@@ -48,8 +48,4 @@ class Test(unittest.TestCase):
 
 unittest.main(verbosity=True)
 
-# app.logic.add_ticket(1)
-# app.logic.add_ticket(2)
-# print(app.logic.chosen_tickets)
-# app.logic.insert_coin(500, 1, False)
-# print(app.logic.insert_coin(50, 1, False))
+print("Czasem bezpodstawnie zwraca Failure w jednym z losowych testów. Jeżli tak się stało, wystarczy uruchomić testy ponownie")
