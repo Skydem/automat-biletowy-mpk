@@ -19,7 +19,7 @@ Projekt miał na celu stworzenie aplikacji automatu biletowego MPK w języku Pyt
 * Automat ma wydawać resztę. Jeżeli nie może, powinien poinformować o możliwości wrzucenia tylko odliczonej kwoty
 
 ## Ogólny opis kodu
-Projekt został podzielony na 3 moduły, który każdy z nich odpowiada za swoją część. 
+Projekt został podzielony na 3 moduły, który każdy z nich odpowiada za swoją część. Projekt zawiera plik `money.csv` który zawiera wystarczającą ilość monet by wykonać testy. 
 * ### Moduł interfejsu:
     Nazwa pliku: `interface.py`
     
