@@ -81,11 +81,11 @@ class storage:
                         break
                     else:
                         fuse+=1
-                        if fuse == 100:
+                        if fuse == 1000:
                             break
-                if fuse == 100:
+                if fuse == 1000:
                     break
-            if fuse == 100:
+            if fuse == 1000:
                 return False
         else:
             return False
@@ -95,16 +95,3 @@ class storage:
 
     def return_keys(self):
         return {k:0 for k in self.money.keys()}
-
-
-
-
-#a = storage()
-# a.add(1, 1)
-# a.add(2, 2)
-# a.add(5, 5)
-# a.add(10, 10)
-# a.add(20, 20)
-#print(a.rest(316, 210))
-#a.rest(310, 210)
-#print(a.money)

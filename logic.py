@@ -1,52 +1,52 @@
-import this
 import money_storage
 import sys
 import interface
 
 class logic:
-    def __init__(self):
+    def __init__(self, fn, fn2):
         #id:cena
         self.tickets = {1: 200, 2:250, 3:300, 4:400, 5:500, 6:600}
         self.chosen_tickets = {k:0 for k in self.tickets.keys()}
         self.price = 0
         self.inserted = 0
         self.rest = 0
+        self.change_page = fn
+        self.window = fn2
         self.ms = money_storage.storage()
         self.inserted_coins = self.ms.return_keys()
     def add_ticket(self, id, quantity=1):
         self.chosen_tickets[id] += quantity
         self.price += self.tickets[id]
-        #print("Dodano bilet!")
-        print(self.chosen_tickets)
     def remove_ticket(self, id, quantity=1):
         self.chosen_tickets[id] -= quantity
         self.price -= self.tickets[id]
-        print(self.chosen_tickets)
     def check_rest(self):
-        print("----check rest----")
         b = self.ms.rest(self.inserted, self.price)
-        #print("b = ", b)
+        temp_text = "Wydaje: \n"
+        temp_error = "Nie można wydać reszty! Tylko odliczona kwota!\nOddaję:"
         if b:
             for key, value in b.items():
                 self.inserted_coins[key] = 0
                 if value > 0:
-                    print("Wydaje: {}gr x{}".format(key, value))
+                    temp_text += f'{key/100}zł x{value}\n'
                     self.ms.sub(key, value, True)
             self.inserted = 0
             self.chosen_tickets = {k:0 for k in self.tickets.keys()}
             self.rest = 0
             self.price = 0
+            self.window(temp_text)
+            self.change_page()
             return True
             
         else:
-            print("Nie można wydać reszty, tylko odliczona kwota")
             for key, value in self.inserted_coins.items():
                 self.ms.sub(key, value, True)
                 if value > 0:
-                    print("Wydaje: {}gr x{}".format(key, value))
+                    temp_error += f'{key/100}zł x{value}\n'
                 self.inserted_coins[key] = 0
             self.inserted = 0
             self.rest = 0
+            self.window(temp_error, True)
             return False
     def insert_coin(self, coin, quantity=1):
         try:
@@ -55,20 +55,10 @@ class logic:
             self.ms.add(coin, quantity, True)
             self.rest = self.inserted - self.price
             
-            print("Do zapłaty {}, Wpłacono {}, Reszta {}".format(self.price, self.inserted, self.rest))
             if self.rest >= 0:
-                
                 self.check_rest()
                 
         except:
             print("otrzymałem: ", coin)
             print(sys.exc_info()[:2])
             print("Nieznana moneta!")
-
-    def refresh_data(self):
-        print('wip')
-
-
-# a = logic()
-# a.add_ticket(1)
-# a.insert_coin(500)
