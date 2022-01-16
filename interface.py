@@ -15,7 +15,7 @@ class Application (Frame):
         self.master = master
         self.logic = logic.logic(self.change_to_page1, self.show_window)
         master.title('Automat Biletowy MPK')
-        master.geometry("150x400")
+        master.geometry("150x430")
         master.minsize(height=500, width=400)
         self.nazwy_monet = ["0.01 zł", "0.02 zł", "0.05 zł", "0.10 zł", "0.20 zł", "0.50 zł", "1.00 zł", "2.00 zł", "5.00 zł", "10.0 zł", "20.0 zł", "50.0 zł"]
         #wartości podane są w groszach!
@@ -30,8 +30,6 @@ class Application (Frame):
         self.mainframe = Frame(self.master)
         self.mainframe.grid(column=0, row=0, sticky=(W, E))
         self.title = Label(self.mainframe, text='Automat Biletowy MPK', font=('bold', 14), pady=20).grid(row=0, column=0, sticky=(N,E,W), columnspan=3)
-
-        Button(self.mainframe, text="Testy", padx=5, command=lambda:[self.testy()]).grid(row=0, column=4, sticky=W) #wywołanie testów
 
         #labels - nagłówki
         self.ulgowy = Label(self.mainframe, text='Ulgowy', padx=10).grid(row=1, column=0, sticky=W)
@@ -111,8 +109,13 @@ class Application (Frame):
                 #dodawanie i usuwanie biletow
                 # w command używana jest lambda ze zmienną o nazwie key, by każdy przycisk inkrementacji i dekrementacji ilości biletów mógł wywołać kilka funkcji na raz
                 # oraz by funkcje miały zachowane zmienne używane w funkcjach
-                globals()['ticket%s_add' % key] = Button(self.mainframe, text="+", padx=5, command=lambda key=key:[self.logic.add_ticket(key), globals()['ticket%s_text' % key].set((str(self.logic.chosen_tickets[key])+"x"+self.nazwy_biletow[key-1])), self.update_sum()]).grid(row=chosen_ticker_row, column=1, sticky=W)
-                globals()['ticket%s_sub' % key] = Button(self.mainframe, text="-", padx=5, command=lambda key=key:[self.logic.remove_ticket(key), globals()['ticket%s_text' % key].set((str(self.logic.chosen_tickets[key])+"x"+self.nazwy_biletow[key-1])), self.update_sum(), self.check_zero(key)]).grid(row=chosen_ticker_row, column=2, sticky=W)
+                globals()['ticket%s_add' % key] = Button(self.mainframe, text="+1", padx=5, command=lambda key=key:[self.logic.add_ticket(key), globals()['ticket%s_text' % key].set((str(self.logic.chosen_tickets[key])+"x"+self.nazwy_biletow[key-1])), self.update_sum()]).grid(row=chosen_ticker_row, column=1, sticky=W)
+                globals()['ticket%s_add2' % key] = Button(self.mainframe, text="+2", padx=5, command=lambda key=key:[self.logic.add_ticket(key, 2), globals()['ticket%s_text' % key].set((str(self.logic.chosen_tickets[key])+"x"+self.nazwy_biletow[key-1])), self.update_sum()]).grid(row=chosen_ticker_row, column=2, sticky=W)
+                globals()['ticket%s_add5' % key] = Button(self.mainframe, text="+5", padx=5, command=lambda key=key:[self.logic.add_ticket(key, 5), globals()['ticket%s_text' % key].set((str(self.logic.chosen_tickets[key])+"x"+self.nazwy_biletow[key-1])), self.update_sum()]).grid(row=chosen_ticker_row, column=3, sticky=W)
+                
+                globals()['ticket%s_sub' % key] = Button(self.mainframe, text="-1", padx=5, command=lambda key=key:[self.logic.remove_ticket(key), globals()['ticket%s_text' % key].set((str(self.logic.chosen_tickets[key])+"x"+self.nazwy_biletow[key-1])), self.update_sum(), self.check_zero(key)]).grid(row=chosen_ticker_row, column=4, sticky=W)
+                globals()['ticket%s_sub2' % key] = Button(self.mainframe, text="-2", padx=5, command=lambda key=key:[self.logic.remove_ticket(key, 2), globals()['ticket%s_text' % key].set((str(self.logic.chosen_tickets[key])+"x"+self.nazwy_biletow[key-1])), self.update_sum(), self.check_zero(key)]).grid(row=chosen_ticker_row, column=5, sticky=W)
+                globals()['ticket%s_sub5' % key] = Button(self.mainframe, text="-5", padx=5, command=lambda key=key:[self.logic.remove_ticket(key, 5), globals()['ticket%s_text' % key].set((str(self.logic.chosen_tickets[key])+"x"+self.nazwy_biletow[key-1])), self.update_sum(), self.check_zero(key)]).grid(row=chosen_ticker_row, column=6, sticky=W)
                 
                 chosen_ticker_row += 1
         
@@ -148,48 +151,3 @@ class Application (Frame):
         #przycisk powrotu jeśli zażyczymy sobie dodanie innych biletów
         self.p1_platnosc = Button(self.mainframe, text='Powrot',pady=10, padx=20, command=lambda:[self.change_to_page1()]).grid(row=10+6, column=0, sticky=S, columnspan=6)
     
-    def testy(self):
-        """Metoda wywołująca testy na automacie. W konsoli widoczne będzie który test wykonuje się"""
-        
-        print("Test #1: Bilet kupiony za odliczoną kwotę")
-        self.logic.add_ticket(2)
-        self.logic.insert_coin(200)
-        self.logic.insert_coin(50)
-
-        print("Test #2: Bilet kupiony płacąc więcej")
-        self.logic.add_ticket(2)
-        self.logic.insert_coin(500)
-
-        print("Test #3: Automat nie może wydać reszty")
-        self.logic.add_ticket(2)
-        self.logic.insert_coin(5000)
-        self.logic.remove_ticket(2)
-
-        print("Test #4: Zakup biletu płacąc 1 gr")
-        self.logic.add_ticket(2)
-        for i in range(249):
-            self.logic.insert_coin(1)
-        self.logic.insert_coin(1)
-
-        print("Test #5: Kupno dwóch biletów")
-        self.logic.add_ticket(2)
-        self.logic.add_ticket(3)
-
-        print("Oczekwiana suma: 5,50 zł, rzeczywista suma: ", self.logic.price)
-        self.logic.insert_coin(500)
-        self.logic.insert_coin(50)
-
-        print("Test #6: Dodanie biletu, wrzucenie kilku monet, dodanie drugiego biletu")
-        self.logic.add_ticket(4)
-        #cena 4 zł
-        self.logic.insert_coin(200)
-        self.logic.add_ticket(5)
-        #oczekwiana cena 9 zł
-        self.logic.insert_coin(500)
-        self.logic.insert_coin(200)
-
-        print("Test #7 Próba wrzucenia ujemnej oraz niecałkowitej liczby monet")
-        self.logic.add_ticket(1)
-        self.logic.insert_coin(-1)
-        #błąd
-        self.logic.insert_coin(0.5)

@@ -1,3 +1,4 @@
+from dis import dis
 import money_storage
 import sys
 import interface
@@ -19,17 +20,17 @@ class logic:
     def add_ticket(self, id, quantity=1):
         """Dodanie biletu o podanym ID i podanej ilośći(domyślnie 1), zaktualizowanie łącznej ceny biletów"""
         self.chosen_tickets[id] += quantity
-        self.price += self.tickets[id]
+        self.price += self.tickets[id]*quantity
     def remove_ticket(self, id, quantity=1):
         """Usunięcie biletu o podanym ID i danej ilośći(domyślnie 1), zaktualizowanie łącznej ceny biltów"""
         self.chosen_tickets[id] -= quantity
-        self.price -= self.tickets[id]
-    def check_rest(self):
+        self.price -= self.tickets[id]*quantity
+    def check_rest(self, display=True):
         """Metoda sprawdzająca czy reszta może być wydana, jeżeli tak, wydaj resztę pokazując okno dialogowe, jeżli nie, wyświetl komunikat o możliwośći zapłaty
         tylko odliczoną kwotą i zwróć wrzucone pieniądze"""
 
         b = self.ms.rest(self.inserted, self.price) # zmienna przechowujaca False lub słownik z możliwą kombinacją pieniedzy do wydania które jest zwracane z modułu obsługi pieniędzy
-        temp_text = "Wydaje: \n"
+        temp_text = f"Wpłacono: {self.inserted/100}zł\nCena: {self.price/100}zł\nReszta do wydania: {self.rest/100}zł\nWydaje: \n"
         temp_error = "Nie można wydać reszty! Tylko odliczona kwota!\nOddaję:"
         if b:
             for key, value in b.items():
@@ -40,37 +41,45 @@ class logic:
             # transakcja zakończona sukcesem, zerowanie poniższych zmiennych
             self.inserted = 0 
             self.chosen_tickets = {k:0 for k in self.tickets.keys()}
+            output_for_test = self.rest # tymczasowa reszta uzywana do testow
             self.rest = 0
             self.price = 0
-            self.window(temp_text)
-            self.change_page()
-            return True # return używany do testów
+            if display==True:
+                self.window(temp_text)
+                self.change_page()
+            #return True # return używany do testów
             
         else:
             # nie można wydać reszty, oddaj pieniądze lecz nie zeruj wybranych biletów
+            rest_output = []
             for key, value in self.inserted_coins.items():
                 self.ms.sub(key, value, True)
                 if value > 0:
                     temp_error += f'{key/100}zł x{value}\n'
+                    rest_output += (key, value)
                 self.inserted_coins[key] = 0
             self.inserted = 0
+            output_for_test = [False, rest_output]
             self.rest = 0
-            self.window(temp_error, True)
-            return False # return używany do testów
-    def insert_coin(self, coin, quantity=1):
+            if display==True:
+                self.window(temp_error, True) # True jeżeli ma to być error
+            #return False # return używany do testów
+        return output_for_test
+    def insert_coin(self, coin, quantity=1, display=True):
         """Metoda dodająca monetę do systemu. Jest ona wrzucana do 'sejfu', suma wrzuconych pieniędzy zostaje aktualizwana, obliczana jest reszta.
         W momencie gdy zwracana reszta jest większa lub równa 0, wywołaj metodę sprawdzającą czy z wrzuconych pieniędzy można wydać resztę."""
         try:
             self.inserted_coins[coin] += quantity
-            self.inserted += coin
+            self.inserted += coin*quantity
             self.ms.add(coin, quantity, True) # True odpowiada za zapis monet do pliku(sejfu), dzięki czemu jesteśmy w stanie wydać resztę z pieniędzy użytkownika jeśli wrzuci np znacznie za dużo
             self.rest = self.inserted - self.price
             
             if self.rest >= 0:
-                self.check_rest()
+                return self.check_rest(display)
                 
         except:
             # Obsługa błędu
-            print("otrzymałem: ", coin)
-            print(sys.exc_info()[:2])
-            print("Nieznana moneta!")
+            #print("otrzymałem: ", coin)
+            #print(sys.exc_info()[:2])
+            #print("Nieznana moneta!")
+            raise
