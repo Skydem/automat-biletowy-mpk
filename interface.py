@@ -8,6 +8,7 @@ from typing import Collection
 import logic
 
 class Application (Frame):
+    """Klasa odpowiadająca za interfejs całej aplikacji."""
     def __init__(self, master):
         """Inicjalizacja parametrów okna a także zmiennych które będą używane w metodach poniżej. Klasa dziedziczy z Frame z modułu tkinter."""
         super().__init__(master)
