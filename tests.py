@@ -17,9 +17,9 @@ class Test(unittest.TestCase):
         app.logic.add_ticket(1)
         self.assertEqual(app.logic.insert_coin(500, 1, False), 300)
     def test3(self):
-        # cena 2 zł, wrzucamy 100x 50zł, oczekiwany błąd i tablica [5000, 100] ([nominał, ilosć])
+        # cena 2 zł, wrzucamy 500x 50zł, oczekiwany błąd i tablica [5000, 100] ([nominał, ilosć])
         app.logic.add_ticket(1)
-        a, b = app.logic.insert_coin(5000, 100, False)
+        a, b = app.logic.insert_coin(5000, 500, False)
         self.assertFalse(a)
         self.assertEqual(b, [5000, 100], 'Test #3: Nie można zwrócić reszty')
         app.logic.remove_ticket(1)
@@ -46,6 +46,5 @@ class Test(unittest.TestCase):
         with self.assertRaises(Exception, msg="Nieznana moneta 0.5!"):
             app.logic.insert_coin(0.5, 1, False)
 
-unittest.main(verbosity=True)
-
-print("Czasem bezpodstawnie zwraca Failure w jednym z losowych testów. Jeżli tak się stało, wystarczy uruchomić testy ponownie")
+print("Czasem bezpodstawnie zwraca Failure/Error w jednym z losowych testów. Jeżli tak się stało, wystarczy uruchomić testy ponownie")
+unittest.main()
